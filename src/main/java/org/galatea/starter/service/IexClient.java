@@ -5,6 +5,7 @@ import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient(name = "IEX", url = "${spring.rest.iexBasePath}")
 public interface IexClient {
-
+  static String TOKEN = "${spring.rest.token}";
   /**
    * Get a list of all stocks supported by IEX. See https://iextrading.com/developer/docs/#symbols.
    * As of July 2019 this returns almost 9,000 symbols, so maybe don't call it in a loop.
    *
    * @return a list of all of the stock symbols supported by IEX.
    */
-  @GetMapping("/ref-data/symbols")
+  @GetMapping("/ref-data/symbols?token=" + TOKEN)
   List<IexSymbol> getAllSymbols();
 
   /**
@@ -29,7 +30,7 @@ public interface IexClient {
    * @param symbols stock symbols to get last traded price for.
    * @return a list of the last traded price for each of the symbols passed in.
    */
-  @GetMapping("/tops/last")
-  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
+  @GetMapping("/tops/last?symbols={symbols}&token="+TOKEN)
+  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@PathVariable String[] symbols);
 
 }
