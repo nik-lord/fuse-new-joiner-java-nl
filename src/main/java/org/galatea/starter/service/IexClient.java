@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient(name = "IEX", url = "${spring.rest.iexBasePath}")
 public interface IexClient {
-  static String TOKEN = "${spring.rest.token}";
+ String TOKEN = "${spring.rest.token}";
   /**
    * Get a list of all stocks supported by IEX. See https://iextrading.com/developer/docs/#symbols.
    * As of July 2019 this returns almost 9,000 symbols, so maybe don't call it in a loop.
@@ -34,7 +34,13 @@ public interface IexClient {
   @GetMapping("/tops/last?symbols={symbols}&token="+TOKEN)
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@PathVariable String[] symbols);
 
-  @GetMapping("/stock/{symbol}/chart"+TOKEN)
-  List<IexHistoricalPrice> getHistoricalPriceForSymbols(@PathVariable String[] symbols);
+  @GetMapping(path = "/stock/{symbol}/chart?token="+TOKEN, params = {"symbol"})
+  IexHistoricalPrice getHistoricalPriceForSymbols(@PathVariable String symbol);
+
+ @GetMapping(path = "/stock/{symbol}/chart/{range}?token="+TOKEN, params = {"symbol", "range"} )
+ IexHistoricalPrice getHistoricalPriceForSymbols(@PathVariable String symbol, @PathVariable String range);
+
+ @GetMapping(path = "/stock/{symbol}/chart/date/{date}?token="+TOKEN , params = {"symbol", "date"})
+ IexHistoricalPrice getHistoricalPriceForSymbols(@PathVariable String symbol, @PathVariable int date);
 
 }
