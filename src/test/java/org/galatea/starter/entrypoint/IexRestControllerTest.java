@@ -81,4 +81,34 @@ public class IexRestControllerTest extends ASpringTest {
         .andExpect(jsonPath("$", is(Collections.emptyList())))
         .andReturn();
   }
+
+  @Test
+  public void testGetHistoricalPriceDate() throws Exception{
+    MvcResult result = this.mvc.perform(
+        org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+        .get("/iex/historicalPrice?symbol=aapl&date=20220503").accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].symbol", is("AAPL")))
+        .andExpect(jsonPath("$[0].open").value(new BigDecimal("158.15")))
+        .andExpect(jsonPath("$[0].close").value(new BigDecimal("159.48")))
+        .andExpect(jsonPath("$[0].high").value(new BigDecimal("160.71")))
+        .andExpect(jsonPath("$[0].low").value(new BigDecimal("156.32")))
+        .andExpect(jsonPath("$[0].volume", is(88966526)))
+        .andReturn();
+  }
+
+  @Test
+  public void testGetHistoricalPriceRange() throws Exception{
+    MvcResult result = this.mvc.perform(
+        org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+            .get("/iex/historicalPrice?symbol=aapl&range=2d").accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].symbol", is("AAPL")))
+        .andExpect(jsonPath("$[0].open").value(new BigDecimal("141.065")))
+        .andExpect(jsonPath("$[0].close").value(new BigDecimal("142.41")))
+        .andExpect(jsonPath("$[0].high").value(new BigDecimal("142.9")))
+        .andExpect(jsonPath("$[0].low").value(new BigDecimal("140.27")))
+        .andExpect(jsonPath("$[0].volume", is(85250939)))
+        .andReturn();
+  }
 }

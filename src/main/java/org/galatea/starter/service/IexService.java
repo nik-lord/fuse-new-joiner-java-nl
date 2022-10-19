@@ -1,10 +1,12 @@
 package org.galatea.starter.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,14 @@ public class IexService {
     } else {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
+  }
+
+  public List<IexHistoricalPrice> getHistoricalPriceForDate(String symbol, LocalDate date){
+    return iexClient.getHistoricalPriceForDate(symbol, date);
+  }
+
+  public List<IexHistoricalPrice> getHistoricalPriceForRange(String symbol, String range){
+    return iexClient.getHistoricalPriceForRange(symbol, range);
   }
 
 

@@ -1,14 +1,17 @@
 package org.galatea.starter.entrypoint;
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.galatea.starter.service.IexService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +49,19 @@ public class IexRestController {
   public List<IexLastTradedPrice> getLastTradedPrice(
       @RequestParam(value = "symbols") final List<String> symbols) {
     return iexService.getLastTradedPriceForSymbols(symbols);
+  }
+
+  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  public List<IexHistoricalPrice> getHistoricalPrice(
+      @RequestParam(value = "symbol") final String symbol,
+      @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyyMMdd") final LocalDate date,
+      @RequestParam(value = "range", required = false) final String range){
+    if(date != null){
+      return iexService.getHistoricalPriceForDate(symbol, date);
+    }
+    return iexService.getHistoricalPriceForRange(symbol, range);
+
+
   }
 
 }
