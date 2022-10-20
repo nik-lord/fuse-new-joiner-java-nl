@@ -1,7 +1,10 @@
 package org.galatea.starter.entrypoint;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,11 +60,28 @@ public class IexRestController {
       @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyyMMdd") final LocalDate date,
       @RequestParam(value = "range", required = false) final String range){
     if(date != null){
-      return iexService.getHistoricalPriceForDate(symbol, date);
+      if(isDateValid(date)) return iexService.getHistoricalPriceForDate(symbol, date);
+      throw new IllegalArgumentException("Date is not valid");
     }
+
+    if(!isRangeValid(range)) throw new IllegalArgumentException("Range value is not valid");
+
     return iexService.getHistoricalPriceForRange(symbol, range);
 
 
+  }
+
+  private boolean isDateValid(LocalDate date) {
+    if(date.isAfter(LocalDate.now())) return false;
+    if(date.isBefore(LocalDate.now().minusYears(5))) return false;
+    return true;
+  }
+
+  private boolean isRangeValid(String range) {
+    if( range == null) return true;
+    Set<String> validRange = new HashSet<>(Arrays.asList("max", "5y", "2y", "1y", "ytd", "6m",
+    "3m", "1m", "1mm", "5d", "5dm", "date", "dynamic"));
+    return validRange.contains(range);
   }
 
 }

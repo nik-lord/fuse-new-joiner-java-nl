@@ -2,6 +2,8 @@ package org.galatea.starter.domain;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,7 @@ import lombok.Data;
 @Builder
 public class IexHistoricalPrice {
   private String symbol;
-  private Date date;
+  private LocalDate date;
   private BigDecimal open;
   private BigDecimal close;
   private BigDecimal high;
