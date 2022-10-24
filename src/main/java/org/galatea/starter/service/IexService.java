@@ -47,11 +47,13 @@ public class IexService {
     }
   }
 
-  public List<IexHistoricalPrice> getHistoricalPriceForDate(String symbol, LocalDate date){
+  public List<IexHistoricalPrice> getHistoricalPriceForDate(final String  symbol,
+                                                            final LocalDate date) {
     return iexClient.getHistoricalPriceForDate(symbol, date);
   }
 
-  public List<IexHistoricalPrice> getHistoricalPriceForRange(String symbol, String range){
+  public List<IexHistoricalPrice> getHistoricalPriceForRange(final String symbol,
+                                                             final String range) {
     return iexClient.getHistoricalPriceForRange(symbol, range);
   }
 

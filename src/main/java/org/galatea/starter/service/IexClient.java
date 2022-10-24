@@ -33,19 +33,21 @@ public interface IexClient {
    * @param symbols stock symbols to get last traded price for.
    * @return a list of the last traded price for each of the symbols passed in.
    */
-  @GetMapping("/tops/last?symbols={symbols}&token="+TOKEN)
+  @GetMapping("/tops/last?symbols={symbols}&token=" + TOKEN)
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@PathVariable String[] symbols);
 
-//  @GetMapping(path = "/stock/{symbol}/chart?token="+TOKEN, params = {"symbol"})
-//  IexHistoricalPrice getHistoricalPriceForSymbol(@PathVariable String symbol);
 
-  @GetMapping(path = "/stock/{symbol}/chart/{range}?token="+TOKEN, params = {"symbol", "range"} )
-  List<IexHistoricalPrice> getHistoricalPriceForRange(@PathVariable String symbol, @PathVariable String range);
+  @GetMapping(path = "/stock/{symbol}/chart/{range}?token=" + TOKEN,
+          params = {"symbol", "range"})
+  List<IexHistoricalPrice> getHistoricalPriceForRange(@PathVariable String symbol,
+                                                      @PathVariable String range);
 
-  @GetMapping(path = "/stock/{symbol}/chart/date/{date}?chartByDay=true&token="+TOKEN, params = {"symbol", "date"} )
-  List<IexHistoricalPrice> getHistoricalPriceForDate(@PathVariable String symbol, @PathVariable String date);
+  @GetMapping(path = "/stock/{symbol}/chart/date/{date}?chartByDay=true&token=" + TOKEN,
+          params = {"symbol", "date"})
+  List<IexHistoricalPrice> getHistoricalPriceForDate(@PathVariable String symbol,
+                                                     @PathVariable String date);
 
-  default List<IexHistoricalPrice> getHistoricalPriceForDate(String symbol, LocalDate date){
+  default List<IexHistoricalPrice> getHistoricalPriceForDate(String symbol, LocalDate date) {
     return getHistoricalPriceForDate(symbol, date.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
   }
 }

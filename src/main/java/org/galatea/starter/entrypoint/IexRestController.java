@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class IexRestController {
 
   @NonNull
   private IexService iexService;
+  private Set<String> rangeVals = new HashSet<>(Arrays.asList("max", "5y", "2y", "1y", "ytd", "6m",
+          "3m", "1m", "1mm", "5d", "2d", "5dm", "date", "dynamic"));
+  private Set<String> validRange = ImmutableSet.copyOf(rangeVals);
 
   /**
    * Exposes an endpoint to get all of the symbols available on IEX.
@@ -54,33 +59,43 @@ public class IexRestController {
     return iexService.getLastTradedPriceForSymbols(symbols);
   }
 
-  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}",
+          produces = {MediaType.APPLICATION_JSON_VALUE})
   public List<IexHistoricalPrice> getHistoricalPrice(
       @RequestParam(value = "symbol") final String symbol,
-      @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyyMMdd") final LocalDate date,
-      @RequestParam(value = "range", required = false) final String range){
-    if(date != null){
-      if(isDateValid(date)) return iexService.getHistoricalPriceForDate(symbol, date);
+      @RequestParam(value = "date", required = false)
+      @DateTimeFormat(pattern = "yyyyMMdd") final LocalDate date,
+      @RequestParam(value = "range", required = false) final String range) {
+    if (date != null) {
+      if (isDateValid(date)) {
+        return iexService.getHistoricalPriceForDate(symbol, date);
+      }
       throw new IllegalArgumentException("Date is not valid");
     }
 
-    if(!isRangeValid(range)) throw new IllegalArgumentException("Range value is not valid");
+    if (!isRangeValid(range)) {
+      throw new IllegalArgumentException("Range value is not valid");
+    }
 
     return iexService.getHistoricalPriceForRange(symbol, range);
 
 
   }
 
-  private boolean isDateValid(LocalDate date) {
-    if(date.isAfter(LocalDate.now())) return false;
-    if(date.isBefore(LocalDate.now().minusYears(5))) return false;
+  private boolean isDateValid(final LocalDate date) {
+    if (date.isAfter(LocalDate.now())) {
+      return false;
+    }
+    if (date.isBefore(LocalDate.now().minusYears(5))) {
+      return false;
+    }
     return true;
   }
 
-  private boolean isRangeValid(String range) {
-    if( range == null) return true;
-    Set<String> validRange = new HashSet<>(Arrays.asList("max", "5y", "2y", "1y", "ytd", "6m",
-    "3m", "1m", "1mm", "5d", "5dm", "date", "dynamic"));
+  private boolean isRangeValid(final String range) {
+    if (range == null) {
+      return true;
+    }
     return validRange.contains(range);
   }
 

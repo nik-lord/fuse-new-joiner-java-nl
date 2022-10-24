@@ -7,7 +7,7 @@
   },
   "response" : {
     "status" : 200,
-    "jsonBody" : [{"symbol":"AAPL","date":1665964800000,"open":141.065,"close":142.41,"high":142.9,"low":140.27,"volume":85250939},{"symbol":"AAPL","date":1666051200000,"open":145.49,"close":143.75,"high":146.7,"low":140.61,"volume":99136610}],
+    "jsonBody" : [{"symbol":"AAPL","date":[2022,5,8],"open":141.065,"close":142.41,"high":142.9,"low":140.27,"volume":85250939},{"symbol":"AAPL","date":[2022,5,9],"open":145.49,"close":143.75,"high":146.7,"low":140.61,"volume":99136610}],
     "headers" : {
       "Server" : "nginx",
       "Date" : "Thu, 08 Aug 2022 14:08:53 GMT",

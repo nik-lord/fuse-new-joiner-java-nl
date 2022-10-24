@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +88,7 @@ public class IexRestControllerTest extends ASpringTest {
   public void testGetHistoricalPriceDate() throws Exception{
     MvcResult result = this.mvc.perform(
         org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-        .get("/iex/historicalPrice?symbol=aapl&date=20220503").accept(MediaType.APPLICATION_JSON_VALUE))
+        .get("/iex/historicalPrice?symbol=aapl&date=20221024").accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].symbol", is("AAPL")))
         .andExpect(jsonPath("$[0].open").value(new BigDecimal("158.15")))
