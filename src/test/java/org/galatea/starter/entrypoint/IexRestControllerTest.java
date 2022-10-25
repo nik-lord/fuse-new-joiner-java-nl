@@ -5,13 +5,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -41,6 +46,15 @@ public class IexRestControllerTest extends ASpringTest {
 
   @Autowired
   private MockMvc mvc;
+
+  @Autowired
+  private IexRestController iexController;
+
+
+  @Before
+  public void setup() throws Exception {
+    ReflectionTestUtils.setField(iexController, "clock", Clock.systemDefaultZone());
+  }
 
   @Test
   public void testGetSymbolsEndpoint() throws Exception {
@@ -86,6 +100,10 @@ public class IexRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetHistoricalPriceDate() throws Exception{
+    ReflectionTestUtils.setField(iexController, "clock", Clock.fixed(LocalDate.parse("2022-10-25").atStartOfDay().toInstant(
+        ZoneOffset.UTC), ZoneId.systemDefault()));
+
+
     MvcResult result = this.mvc.perform(
         org.springframework.test.web.servlet.request.MockMvcRequestBuilders
         .get("/iex/historicalPrice?symbol=aapl&date=20221024").accept(MediaType.APPLICATION_JSON_VALUE))

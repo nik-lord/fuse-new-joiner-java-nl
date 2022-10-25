@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,9 +33,12 @@ public class IexRestController {
 
   @NonNull
   private IexService iexService;
+
   private Set<String> rangeVals = new HashSet<>(Arrays.asList("max", "5y", "2y", "1y", "ytd", "6m",
           "3m", "1m", "1mm", "5d", "2d", "5dm", "date", "dynamic"));
   private Set<String> validRange = ImmutableSet.copyOf(rangeVals);
+
+  private Clock clock = Clock.systemDefaultZone();
 
   /**
    * Exposes an endpoint to get all of the symbols available on IEX.
@@ -83,10 +87,10 @@ public class IexRestController {
   }
 
   private boolean isDateValid(final LocalDate date) {
-    if (date.isAfter(LocalDate.now())) {
+    if (date.isAfter(LocalDate.now(clock))) {
       return false;
     }
-    if (date.isBefore(LocalDate.now().minusYears(5))) {
+    if (date.isBefore(LocalDate.now(clock).minusYears(5))) {
       return false;
     }
     return true;
