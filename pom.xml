@@ -58,6 +58,12 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-cassandra</artifactId>
+		</dependency>
+
+
 		<!-- Use log4j instead of logback -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
