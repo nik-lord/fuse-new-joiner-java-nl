@@ -15,12 +15,17 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table
 public class IexHistoricalPrice {
   @PrimaryKey
+  private String uniqueid;
   private String symbol;
-  @PrimaryKey
   private LocalDate date;
   private BigDecimal open;
   private BigDecimal close;
   private BigDecimal high;
   private BigDecimal low;
   private BigDecimal volume;
+
+
+  public String getUniqueid() {
+    return symbol+date;
+  }
 }

@@ -2,6 +2,7 @@ package org.galatea.starter.entrypoint;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +17,9 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
+import org.galatea.starter.domain.rpsy.HistoricalPriceRpsy;
 import org.galatea.starter.service.IexService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class IexRestController {
+  @Autowired
+  private HistoricalPriceRpsy historicalPriceRpsy;
 
   @NonNull
   private IexService iexService;
@@ -72,7 +77,17 @@ public class IexRestController {
       @RequestParam(value = "range", required = false) final String range) {
     if (date != null) {
       if (isDateValid(date)) {
-        return iexService.getHistoricalPriceForDate(symbol, date);
+        if(historicalPriceRpsy.existsById(symbol+date)){
+          List<IexHistoricalPrice> list = new ArrayList<IexHistoricalPrice>();
+          list.add(historicalPriceRpsy.findById(symbol+date).get());
+          return list;
+        }
+        List<IexHistoricalPrice> list = iexService.getHistoricalPriceForDate(symbol, date);
+        System.out.println(list.get(0).getUniqueid());
+        for (IexHistoricalPrice i : list){
+          historicalPriceRpsy.save(i);
+        }
+        return list;
       }
       throw new IllegalArgumentException("Date is not valid");
     }

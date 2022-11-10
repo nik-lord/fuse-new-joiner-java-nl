@@ -7,7 +7,7 @@
   },
   "response" : {
     "status" : 200,
-    "jsonBody" : [{"symbol":"AAPL","date":[2022,5,3],"open":158.15,"close":159.48,"high":160.71,"low":156.32,"volume":88966526}],
+    "jsonBody" : [{"key": {"symbol":"AAPL","date":[2022,5,3]},"open":158.15,"close":159.48,"high":160.71,"low":156.32,"volume":88966526}],
     "headers" : {
       "Server" : "nginx",
       "Date" : "Thu, 08 Aug 2022 14:08:53 GMT",

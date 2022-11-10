@@ -108,7 +108,7 @@ public class IexRestControllerTest extends ASpringTest {
         org.springframework.test.web.servlet.request.MockMvcRequestBuilders
         .get("/iex/historicalPrice?symbol=aapl&date=20221024").accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].symbol", is("AAPL")))
+        .andExpect(jsonPath("$[0].key.symbol", is("AAPL")))
         .andExpect(jsonPath("$[0].open").value(new BigDecimal("158.15")))
         .andExpect(jsonPath("$[0].close").value(new BigDecimal("159.48")))
         .andExpect(jsonPath("$[0].high").value(new BigDecimal("160.71")))
@@ -123,7 +123,7 @@ public class IexRestControllerTest extends ASpringTest {
         org.springframework.test.web.servlet.request.MockMvcRequestBuilders
             .get("/iex/historicalPrice?symbol=aapl&range=2d").accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].symbol", is("AAPL")))
+        .andExpect(jsonPath("$[0].key.symbol", is("AAPL")))
         .andExpect(jsonPath("$[0].open").value(new BigDecimal("141.065")))
         .andExpect(jsonPath("$[0].close").value(new BigDecimal("142.41")))
         .andExpect(jsonPath("$[0].high").value(new BigDecimal("142.9")))
