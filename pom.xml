@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 		<jaxb.api.version>2.3.1</jaxb.api.version>
 		<!-- VM and application args used during maven steps, e.g. mvn test -->
 		<!-- Use log config that writes to stdout so that application logs during tests show up in Jenkins build logs -->
@@ -57,6 +57,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-cassandra</artifactId>
+		</dependency>
+
 
 		<!-- Use log4j instead of logback -->
 		<dependency>
